@@ -19,37 +19,59 @@
       crossorigin="anonymous"
     />
   </head>
-  <div class="container">
-    <div class="jumbotron text-center">
-        <h1 class="display-4" class="font-weight-bold">Hot Restaurant</h1>
-        <hr class="my-4" />
-        <p>We only have 5 tables! Book your seat before they all are gone!</p>
-        <a class="btn btn-primary btn-lg" href="home.html" role="button"
-          >Go Home</a
-        >
-        <a class="btn btn-danger btn-lg" href="reserve.html" role="button"
-          >Make Reservation</a
-        >
-      </div>
-  </div>
-  <div class="container">
-    <div class="row" id="reservations">
-      <div class="col-md-12">
-        <h3>Reservations</h3>
-        <ul class="reservationElements">
-          <!-- Reservation elements here  -->
-        </ul>
-      </div>
-    </div>>
-    <div class="row" id="waitlist">
-      <div class="col-md-12">
-        <h3>Waitlist</h3>
-        <ul class="waitlistElements">
-          <!-- Waitlist elements  -->
-        </ul>
-      </div>
+  <body>
+    <div class="container">
+        <div class="jumbotron text-center">
+            <h1 class="display-4" class="font-weight-bold"><i class="fa fa-fire" aria-hidden="true"></i> Hot Restaurant</h1>
+            <hr class="my-4" />
+            <p>We only have 5 tables! Book your seat before they all are gone!</p>
+            <a class="btn btn-danger btn-lg" href="/reserve" role="button"
+              ><i class="fa fa-ticket" aria-hidden="true"></i>Make Reservation</a
+            >
+            <a class="btn btn-lg" href="/" role="button"
+              ><i class="fa fa-home" aria-hidden="true"></i></i></a
+            >
+          </div>
+          <div class="card">
+            <div class="card-header">
+                Current Reservations
+            </div>
+            <div class="card-body">
+              <blockquote class="blockquote mb-0">
+                <div class="card border-dark mb-3">
+                    <div class="card-header">Table #1</div>
+                    <div class="card-body text-dark">
+                      <h5 class="card-title"></h5>
+                      <p class="card-text" id="reservationElements"></p>
+                    </div>
+                  </div>
+              </blockquote>
+            </div>
+          </div>
+          <div class="card mt-3">
+            <div class="card-header" >
+                Waiting List
+            </div>
+            <div class="card-body" >
+              <blockquote class="blockquote mb-0">
+                <div class="card border-dark mb-3">
+                    <div class="card-header">Table #1</div>
+                    <div class="card-body text-dark">
+                      <h5 class="card-title"></h5>
+                      <p class="card-text" id="waitlistElements"></p>
+                    </div>
+                  </div>
+              </blockquote>
+            </div>
+          </div>
+    ​
+          <footer class="mt-5 mb-5">
+              <a href="">Clear Table| </a>
+              <a href="/api/tables">API Table Link|</a>
+              <!-- <a href="">API Wait List</a> -->
+          </footer>
     </div>
-  </div>
+    </body>
   <body>
     <script
       src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -65,6 +87,23 @@
     <script>
       $(document).ready(function () {
           console.log("This works");
+
+          $.get("/api/tables", function(res) {
+            console.log(res);
+            const reservations = res.reservations;
+            const waitList = res.waitList;
+            for (let i = 0; i < reservations.length; i++) {
+              const name = reservations[i].name;
+              const newTable = $("<div>").text(`${i+1}: ${name}`).addClass("tableElement");
+              $("#reservationElements").append(newTable);
+            }
+
+            for (let i = 0; i < waitList.length; i++) {
+              const name = waitList[i].name;
+              const newWait = $("<div>").text(`${i+1}: ${name}`).addClass("tableElement");
+              $("#waitlistElements").append(newWait);
+            }
+          })
       })
   </script>
   </body>
